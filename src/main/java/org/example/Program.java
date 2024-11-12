@@ -27,12 +27,12 @@ class OddNumber implements Runnable
 
 public class Program
 {
-    static FirstThread EvenNumber;
-    static SecondThread OddNumber;
+    static EvenNumber ThreadOne;
+    static OddNumber ThreadTwo;
     public static void main(String[] args)
     {
-        ThreadOne = new FirstThread();
-        ThreadTwo = new SecondThread();
+        ThreadOne = new EvenNumber();
+        ThreadTwo = new OddNumber();
         Thread One = new Thread(ThreadOne);
         Thread Two = new Thread(ThreadTwo);
         One.start();
