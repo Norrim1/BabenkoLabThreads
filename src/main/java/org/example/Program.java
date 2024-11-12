@@ -1,6 +1,6 @@
 package org.example;
 
-class FirstThread extends java.lang.Thread
+class EvenNumber extends java.lang.Thread
 {
     @Override
     public void run(){
@@ -15,7 +15,7 @@ class FirstThread extends java.lang.Thread
     }
 }
 
-class SecondThread implements Runnable
+class OddNumber implements Runnable
 {
        public void run(){
            for(int i = 1; i <= 5; i++)
@@ -25,10 +25,10 @@ class SecondThread implements Runnable
        }
 }
 
-public class Program			//Класс с методом main()
+public class Program
 {
-    static FirstThread ThreadOne;
-    static SecondThread ThreadTwo;
+    static FirstThread EvenNumber;
+    static SecondThread OddNumber;
     public static void main(String[] args)
     {
         ThreadOne = new FirstThread();
