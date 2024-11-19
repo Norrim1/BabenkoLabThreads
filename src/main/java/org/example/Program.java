@@ -32,7 +32,7 @@ class ShoesStorage {
         OrderClass Order;
         Order = OrderListExample.poll();
         assert Order != null;
-        System.out.println("Fulfilled order: " + Order.name() + " " + Order.amount());
+        System.out.print("Fulfilled order: " + Order.name() + " " + Order.amount());
         notifyAll();
     }
 }
@@ -42,15 +42,17 @@ class Producer extends java.lang.Thread
 {
     private final ShoesStorage OrderListExample;
     private final ShoesStorage Product;
-    public Producer(ShoesStorage OrderListExample, ShoesStorage Product)
+    int n;
+    public Producer(ShoesStorage OrderListExample, ShoesStorage Product, int n)
     {
         this.OrderListExample = OrderListExample;
         this.Product = Product;
+        this.n = n;
     }
     @Override
     public void run(){
 
-            for(int i = 1; i <= 10; i++){
+            for(int i = 1; i <= n; i++){
                 try {
                     Random RandomNum = new Random();
                     int RandomPositionInList = RandomNum.nextInt(12);
@@ -70,15 +72,19 @@ class Producer extends java.lang.Thread
 class Consumer extends java.lang.Thread
 {
     private final ShoesStorage OrderListExample;
-    public Consumer(ShoesStorage OrderListExample)
+    int n, TrackNum;
+    public Consumer(ShoesStorage OrderListExample, int n, int TrackNum)
     {
         this.OrderListExample = OrderListExample;
+        this.n = n/5;
+        this.TrackNum = TrackNum;
     }
     @Override
     public void run() {
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= n; i++) {
             try {
                 OrderListExample.fulfillOrder();
+                System.out.println(" by thread "+TrackNum);
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -91,14 +97,22 @@ public class Program
 {
     public static void main(String[] args)
     {
+        int Num = 25;
         ShoesStorage OrderListExample = new ShoesStorage();
-        Thread producer1 = new Thread(new Producer(OrderListExample, OrderListExample));
-        Thread consumer1 = new Thread(new Consumer(OrderListExample));
-        producer1.start();
-        consumer1.start();
-        try{
-            producer1.join();
-            consumer1.join();
+        Thread producer = new Thread(new Producer(OrderListExample, OrderListExample, Num));
+        producer.start();
+        for(int i = 1; i <= Num/5; i++)
+        {
+            Thread consumer = new Thread(new Consumer(OrderListExample, Num, i));
+            consumer.start();
+            try {
+                consumer.join(26);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            producer.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
