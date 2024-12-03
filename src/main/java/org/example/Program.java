@@ -41,12 +41,10 @@ class ShoesStorage {
 class Producer extends java.lang.Thread
 {
     private final ShoesStorage OrderListExample;
-    private final ShoesStorage Product;
     int n;
-    public Producer(ShoesStorage OrderListExample, ShoesStorage Product, int n)
+    public Producer(ShoesStorage OrderListExample, int n)
     {
         this.OrderListExample = OrderListExample;
-        this.Product = Product;
         this.n = n;
     }
     @Override
@@ -57,7 +55,7 @@ class Producer extends java.lang.Thread
                     Random RandomNum = new Random();
                     int RandomPositionInList = RandomNum.nextInt(12);
                     int AmountOfProduct = RandomNum.nextInt(19) + 1; //Pair of shoes
-                    String Name = Product.Product.get(RandomPositionInList);
+                    String Name = OrderListExample.Product.get(RandomPositionInList);
                     OrderClass Order = new OrderClass(Name, AmountOfProduct);
                     OrderListExample.receiveOrder(Order);
                     Thread.sleep(5);
@@ -99,7 +97,7 @@ public class Program
     {
         int Num = 25;
         ShoesStorage OrderListExample = new ShoesStorage();
-        Thread producer = new Thread(new Producer(OrderListExample, OrderListExample, Num));
+        Thread producer = new Thread(new Producer(OrderListExample, Num));
         producer.start();
         for(int i = 1; i <= Num/5; i++)
         {
